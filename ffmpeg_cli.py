@@ -16,7 +16,7 @@ parser.add_argument("-cd", "--crop-detect", help="show cropdetect for 10 sek", a
 parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
 args = parser.parse_args()
 
-input_video = Input(args.input.encode('utf-8'))
+input_video = Input(args.input)
 stream1 = Stream()
 stream1.add_parameter('-threads', '5')
 stream1.add_parameter('-vcodec', 'libx264')
@@ -62,7 +62,7 @@ elif args.crop:
 
 input_file_name, input_file_extension = splitext(args.input)
 # output = Output(input_file_name + u".mp4", filter, stream1, stream2, stream3)
-output = Output(input_file_name + u".mp4", filter, stream1)
+output = Output(input_file_name + '.mp4', filter, stream1)
 for stream in audio_streams:
     output.append(stream)
 
