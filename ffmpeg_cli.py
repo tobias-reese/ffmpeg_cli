@@ -30,7 +30,7 @@ stream1.add_mapping('0:0')
 
 audio_streams = []
 
-if len(args.audio_channels) > 0:
+if args.audio_channels and len(args.audio_channels) > 0:
     for i in xrange(0, len(args.audio_channels)):
         aentry = args.audio_channels[i].split(':')
         if len(aentry) != 2:
