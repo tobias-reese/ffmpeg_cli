@@ -36,7 +36,7 @@ if args.audio_channels and len(args.audio_channels) > 0:
         if len(aentry) != 2:
             exit("Wrong audio channel format: " + args.audio_channels[i])
         stream = Stream(stream_index=i, stream_type='a')
-        stream.set_language('language', aentry[1])
+        stream.set_language(aentry[1])
         stream.add_mapping('0:' + aentry[0])
         audio_streams.append(stream)
 
