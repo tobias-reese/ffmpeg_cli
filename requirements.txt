@@ -1,1 +1,2 @@
+Paver
 git+https://github.com/tobias-reese/ffmpegwrapper#egg=ffmpegwrapper
