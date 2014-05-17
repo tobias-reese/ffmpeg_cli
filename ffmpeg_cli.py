@@ -7,12 +7,19 @@ from ffmpegwrapper.ffmpeg import Input, FFmpeg, Stream, Output
 from os.path import splitext
 from ffmpegwrapper.filter import VideoFilter
 
+def check_negative(value):
+    ivalue = int(value)
+    if ivalue < 0:
+         raise argparse.ArgumentTypeError("%s is an invalid positive int value" % value)
+    return ivalue
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input", help="input file to encode.")
 parser.add_argument("-d", "--debug", help="print resulting command and exit", action="store_true")
 parser.add_argument("-c", "--crop", help="add cropping. w:h:xoff:yoff:")
 parser.add_argument("-s", "--size", help="set size (wxh, 1920x1024)")
-parser.add_argument("-cd", "--crop-detect", help="show cropdetect for 10 sek", action="store_true")
+parser.add_argument("-cd", "--crop-detect", help="show cropdetect", action="store_true")
+parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n sek (10 sek default)", type=check_negative)
 parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
 args = parser.parse_args()
 
@@ -76,7 +83,10 @@ else:
     while proc.process.poll() is None:
         for line in proc.readlines():
             if args.crop_detect:
-                if (datetime.now() - start).total_seconds() > 10:
+                time = 10
+                if args.crop_detect_time:
+                    time = args.crop_detect_time
+                if (datetime.now() - start).total_seconds() > time:
                     proc.process.kill()
                 m = re.search('.*crop=(.*)', line)
                 if m:
