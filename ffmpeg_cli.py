@@ -52,17 +52,6 @@ if args.audio_channels and len(args.audio_channels) > 0:
         stream.add_mapping('0:' + aentry[0])
         audio_streams.append(stream)
 
-
-
-#
-# stream2 = Stream(stream_index=0, stream_type='a')
-# stream2.set_metadata('language', 'deu')
-# stream2.add_mapping('0:2')
-#
-# stream3 = Stream(stream_index=1, stream_type='a')
-# stream3.set_metadata('language', 'eng')
-# stream2.add_mapping('0:1')
-
 filter = VideoFilter()
 if args.deinterlace:
     filter.yadif()
@@ -75,7 +64,6 @@ elif args.crop:
     filter.crop(crop_settings[0], crop_settings[1], crop_settings[2], crop_settings[3])
 
 input_file_name, input_file_extension = splitext(args.input)
-# output = Output(input_file_name + u".mp4", filter, stream1, stream2, stream3)
 output = Output(input_file_name + '.mp4', filter, stream1)
 for stream in audio_streams:
     output.append(stream)
