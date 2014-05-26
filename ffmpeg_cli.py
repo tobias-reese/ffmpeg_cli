@@ -21,6 +21,7 @@ parser.add_argument("-s", "--size", help="set size (wxh, 1920x1024)")
 parser.add_argument("-cd", "--crop-detect", help="show cropdetect", action="store_true")
 parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n sek (10 sek default)", type=check_negative)
 parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
+parser.add_argument("-di", "--deinterlace", help="adds deinterlacing", action="store_true")
 parser.add_argument("-vc", "--video-channel", help="video stream in source")
 args = parser.parse_args()
 
@@ -63,6 +64,8 @@ if args.audio_channels and len(args.audio_channels) > 0:
 # stream2.add_mapping('0:1')
 
 filter = VideoFilter()
+if args.deinterlace:
+    filter.yadif()
 filter.hqdn3d(5, 3)
 
 if args.crop_detect:
