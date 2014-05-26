@@ -23,6 +23,7 @@ parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n se
 parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
 parser.add_argument("-di", "--deinterlace", help="adds deinterlacing", action="store_true")
 parser.add_argument("-vc", "--video-channel", help="video stream in source")
+parser.add_argument("-ar", "--aspect-ratio", help="set video aspect ratio")
 args = parser.parse_args()
 
 input_video = Input(args.input)
@@ -39,6 +40,8 @@ if args.video_channel:
     stream1.add_mapping('0:' + args.video_channel)
 else:
     stream1.add_mapping('0:0')
+if args.aspect_ratio:
+    stream1.add_parameter('-aspect', args.aspect_ratio)
 
 audio_streams = []
 
