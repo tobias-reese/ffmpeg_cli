@@ -21,6 +21,7 @@ parser.add_argument("-s", "--size", help="set size (wxh, 1920x1024)")
 parser.add_argument("-cd", "--crop-detect", help="show cropdetect", action="store_true")
 parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n sek (10 sek default)", type=check_negative)
 parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
+parser.add_argument("-vc", "--video-channel", help="video stream in source")
 args = parser.parse_args()
 
 input_video = Input(args.input)
@@ -33,7 +34,10 @@ stream1.add_parameter('-ab', '192k')
 if args.size:
     stream1.add_parameter('-s', args.size)
 stream1.add_parameter('-y', '')
-stream1.add_mapping('0:0')
+if args.video_channel:
+    stream1.add_mapping('0:' + args.video_channel)
+else:
+    stream1.add_mapping('0:0')
 
 audio_streams = []
 
