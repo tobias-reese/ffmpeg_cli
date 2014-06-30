@@ -6,6 +6,8 @@ import re
 from ffmpegwrapper.ffmpeg import Input, FFmpeg, Stream, Output
 from os.path import splitext
 from ffmpegwrapper.filter import VideoFilter
+import sys
+
 
 def check_negative(value):
     ivalue = int(value)
@@ -19,8 +21,11 @@ parser.add_argument("-d", "--debug", help="print resulting command and exit", ac
 parser.add_argument("-c", "--crop", help="add cropping. w:h:xoff:yoff:")
 parser.add_argument("-s", "--size", help="set size (wxh, 1920x1024)")
 parser.add_argument("-cd", "--crop-detect", help="show cropdetect", action="store_true")
-parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n sek (10 sek default)", type=check_negative)
-parser.add_argument("-ac", "--audio-channels", nargs="*", help="audio channels to add in order with languages (0:deu, 1:eng)")
+parser.add_argument("-cdt", "--crop-detect-time", help="show cropdetect for n sek (10 sek default)",
+                    type=check_negative)
+parser.add_argument("-crf", "--constant-rate-factor", help="set crf factor (default=20)", default=20)
+parser.add_argument("-ac", "--audio-channels", nargs="*",
+                    help="audio channels to add in order with languages (0:deu, 1:eng)")
 parser.add_argument("-di", "--deinterlace", help="adds deinterlacing", action="store_true")
 parser.add_argument("-vc", "--video-channel", help="video stream in source")
 parser.add_argument("-ar", "--aspect-ratio", help="set video aspect ratio")
@@ -30,7 +35,8 @@ input_video = Input(args.input)
 stream1 = Stream()
 stream1.add_parameter('-threads', '5')
 stream1.add_parameter('-vcodec', 'libx264')
-stream1.add_parameter('-crf', '23')
+print args.constant_rate_factor
+stream1.add_parameter('-crf', str(args.constant_rate_factor))
 stream1.add_parameter('-acodec', 'ac3')
 stream1.add_parameter('-ab', '192k')
 if args.size:
@@ -49,7 +55,7 @@ if args.audio_channels and len(args.audio_channels) > 0:
     for i in xrange(0, len(args.audio_channels)):
         aentry = args.audio_channels[i].split(':')
         if len(aentry) != 2:
-            exit("Wrong audio channel format: " + args.audio_channels[i])
+            sys.exit("Wrong audio channel format: " + args.audio_channels[i])
         stream = Stream(stream_index=i, stream_type='a')
         stream.set_language(aentry[1])
         stream.add_mapping('0:' + aentry[0])
